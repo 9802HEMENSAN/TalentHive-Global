@@ -1,0 +1,20 @@
+{
+  "name": "talenthive-global",
+  "version": "1.0.0",
+  "description": "A global professional Networking Site just like linkdin",
+  "homepage": "https://github.com/9802HEMENSAN/TalentHive-Global#readme",
+  "bugs": {
+    "url": "https://github.com/9802HEMENSAN/TalentHive-Global/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/9802HEMENSAN/TalentHive-Global.git"
+  },
+  "license": "ISC",
+  "author": "Hemensan Mahilange",
+  "type": "commonjs",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
