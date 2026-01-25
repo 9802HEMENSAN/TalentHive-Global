@@ -89,8 +89,8 @@
 
 ```
 talenthive-global/
-├── client/          # Frontend
-├── server/          # Backend
+├── frontend/          # Frontend
+├── backend/          # Backend
 │   ├── controllers/
 │   ├── routes/
 │   ├── models/
