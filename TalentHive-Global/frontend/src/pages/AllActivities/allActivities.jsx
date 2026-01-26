@@ -5,6 +5,7 @@ import Advertisement from '../../components/Advertisement/advertisement';
 import Card from '../../components/Card/card';
 import Post from '../../components/Post/post';
 import axios from 'axios'
+import { serverUrl } from '../../App';
 
 const AllActivities = () => {
 
@@ -14,7 +15,7 @@ const AllActivities = () => {
   const [ownData, setOwnData] = useState(null)
 
   const fetchDataOnLoad = async () => {
-    await axios.get(`http://localhost:4000/api/post/getAllPostForUser/${id}`).then(res => {
+    await axios.get(`${serverUrl}/api/post/getAllPostForUser/${id}`).then(res => {
       console.log(res)
       setPosts(res.data.posts)
     }).catch(err => {

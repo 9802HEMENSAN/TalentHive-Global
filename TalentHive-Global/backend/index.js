@@ -10,7 +10,7 @@ const PORT_ORIGIN = process.env.PORT_ORIGIN || 5000;
 const server = http.createServer(app);
 const io = new Server(server,{
     cors:{
-       origin: "https://talenthive-global.vercel.app",
+       origin: `https://talenthive-global.onrender.com`,
        credentials: true,
     methods:['GET','POST'],
     }

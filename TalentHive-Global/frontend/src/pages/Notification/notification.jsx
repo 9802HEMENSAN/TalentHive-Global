@@ -4,6 +4,7 @@ import Advertisement from '../../components/Advertisement/advertisement'
 import Card from '../../components/Card/card'
 import axios from 'axios'
 import { useNavigate } from 'react-router-dom'
+import { serverUrl } from '../../App'
 
 const Notification = () => {
   const navigate = useNavigate();
@@ -12,7 +13,7 @@ const Notification = () => {
   const [notifications, setNotifications] = useState([]);
 
   const fetchNotificationData = async () => {
-    await axios.get('http://localhost:4000/api/notification', { withCredentials: true }).then(res => {
+    await axios.get(`${serverUrl}/api/notification`, { withCredentials: true }).then(res => {
       console.log(res.data.notifications)
       setNotifications(res.data.notifications)
     }).catch(err => {
@@ -22,7 +23,7 @@ const Notification = () => {
   }
 
   const handleOnClickNotification = async(item)=>{
-    await axios.put('http://localhost:4000/api/notification/isRead',{notificationId:item._id},{withCredentials:true}).then(res=>{
+    await axios.put(`${serverUrl}/api/notification/isRead`,{notificationId:item._id},{withCredentials:true}).then(res=>{
         if(item.type==="comment"){
           navigate(`/profile/${ownData?._id}/activities/${item.postId}`)
         }else{

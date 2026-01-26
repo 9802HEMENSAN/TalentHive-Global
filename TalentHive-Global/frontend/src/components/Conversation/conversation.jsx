@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 
-const Conversation = ({ item, key, ownData, handleSelectedConv, activeConvId }) => {
+const Conversation = ({ item,   ownData, handleSelectedConv, activeConvId }) => {
 
     const [memberData, setMemberData] = useState(null)
 
@@ -16,7 +16,7 @@ const Conversation = ({ item, key, ownData, handleSelectedConv, activeConvId }) 
     }
 
     return (
-        <div onClick={handleClickFunc} key={key} className={`flex items-center w-full cursor-pointer border-b-1 border-gray-300 gap-3 p-4 hover:bg-gray-200 ${activeConvId===item?._id?'bg-gray-200':null}`}>
+        <div onClick={handleClickFunc} key={Date.now()+ Math.random(4)} className={`flex items-center w-full cursor-pointer border-b-1 border-gray-300 gap-3 p-4 hover:bg-gray-200 ${activeConvId===item?._id?'bg-gray-200':null}`}>
             <div className='shrink-0'>
                 <img className='w-12 h-12 rounded-[100%] cursor-pointer' src={memberData?.profilePic} />
             </div>

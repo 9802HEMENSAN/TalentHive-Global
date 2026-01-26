@@ -7,6 +7,7 @@ import ImageIcon from '@mui/icons-material/Image';
 import Advertisement from '../../components/Advertisement/advertisement';
 import axios from 'axios';
 import socket from '../../../socket';
+import { serverUrl } from '../../App';
 
 const Messages = () => {
 

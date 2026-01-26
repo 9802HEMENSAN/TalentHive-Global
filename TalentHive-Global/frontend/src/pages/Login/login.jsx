@@ -3,6 +3,7 @@ import { Link,useNavigate } from 'react-router-dom'
 import GoogleLoginComp from '../../components/GoogleLogin/googleLoginComp'
 import { ToastContainer, toast } from 'react-toastify'
 import axios from 'axios'
+import { serverUrl } from '../../App'
 
 
 const Login = (props) => {
@@ -17,7 +18,7 @@ const Login = (props) => {
         if (loginField.email.trim().length === 0 || loginField.password.trim().length === 0) {
             return toast.error("Please fill all credentials")
         }
-        await axios.post('http://localhost:4000/api/auth/login',loginField,{withCredentials:true}).then((res) => {
+        await axios.post(`${serverUrl}/api/auth/login`,loginField,{withCredentials:true}).then((res) => {
             console.log("login page response",res);
             props.changeLoginValue(true);
             localStorage.setItem('isLogin', 'true');

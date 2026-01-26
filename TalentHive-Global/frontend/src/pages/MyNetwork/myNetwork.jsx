@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import ProfileCard from '../../components/ProfileCard/profileCard'
 import axios from 'axios'
+import { serverUrl } from '../../App';
 const MyNetwork = () => {
 
     const [text, setText] = useState("Catch Up with Friends");
@@ -15,7 +16,7 @@ const MyNetwork = () => {
     }
 
     const fetchFriendList = async () => {
-        await axios.get('http://localhost:4000/api/auth/friendsList', { withCredentials: true }).then((res) => {
+        await axios.get(`${serverUrl}/api/auth/friendsList`, { withCredentials: true }).then((res) => {
             console.log(res)
             setData(res.data.friends)
         }).catch(err => {
@@ -25,7 +26,7 @@ const MyNetwork = () => {
     }
 
     const fetchPendingRequest = async () => {
-        await axios.get('http://localhost:4000/api/auth/pendingFriendsList', { withCredentials: true }).then((res) => {
+        await axios.get(`${serverUrl}/api/auth/pendingFriendsList`, { withCredentials: true }).then((res) => {
             console.log(res)
             setData(res.data.pendingFriends)
         }).catch(err => {

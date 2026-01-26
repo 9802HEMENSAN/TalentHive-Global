@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import ImageIcon from '@mui/icons-material/Image';
 import { ToastContainer, toast } from 'react-toastify';
 import axios from 'axios';
+import { serverUrl } from '../../App';
 const AddModal = (props) => {
 
     const [imageUrl, setImageUrl] = useState(null)
@@ -13,7 +14,7 @@ const AddModal = (props) => {
     const handlePost = async () => {
         if (desc.trim().length === 0 & !imageUrl) return toast.error("Please enter any field");
 
-        await axios.post('http://localhost:4000/api/post',{desc:desc,imageLink:imageUrl},{withCredentials:true}).then((res=>{
+        await axios.post(`${serverUrl}/api/post`,{desc:desc,imageLink:imageUrl},{withCredentials:true}).then((res=>{
             window.location.reload();
         })).catch(err => {
             console.log(err)

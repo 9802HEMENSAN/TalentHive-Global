@@ -5,6 +5,7 @@ import Post from '../../components/Post/post'
 import Advertisement from '../../components/Advertisement/advertisement'
 import axios from 'axios'
 import { useParams } from 'react-router-dom'
+import { serverUrl } from '../../App'
 
 const SingleActivity = () => {
 
@@ -15,7 +16,7 @@ const SingleActivity = () => {
 
 
     const fetchDataOnLoad = async () => {
-        await axios.get(`http://localhost:4000/api/post/getPostById/${postId}`).then((res => {
+        await axios.get(`${serverUrl}/api/post/getPostById/${postId}`).then((res => {
             console.log(res)
             setPost(res.data.post)
         })).catch(err => {

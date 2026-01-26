@@ -15,6 +15,7 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
 import { ToastContainer, toast } from 'react-toastify';
+import { serverUrl } from '../../App';
 
 const Profile = () => {
     const { id } = useParams();
@@ -52,9 +53,9 @@ const Profile = () => {
     const fetchDataOnLoad = async () => {
         try {
             const [userDatas, postDatas, ownDatas] = await Promise.all([
-                axios.get(`http://localhost:4000/api/auth/user/${id}`),
-                axios.get(`http://localhost:4000/api/post/getTop5Post/${id}`),
-                axios.get('http://localhost:4000/api/auth/self', { withCredentials: true })
+                axios.get(`${serverUrl}/api/auth/user/${id}`),
+                axios.get(`${serverUrl}/api/post/getTop5Post/${id}`),
+                axios.get(`${serverUrl}/api/auth/self`, { withCredentials: true })
             ]);
 
             setUserData(userDatas.data.user);
@@ -66,7 +67,7 @@ const Profile = () => {
 
         } catch (err) {
             console.log(err)
-            alert("Something Went Wrong")
+            // alert("Something Went Wrong")
 
         }
     }
@@ -111,7 +112,7 @@ const Profile = () => {
 
 
     const handleEditFunc = async (data) => {
-        await axios.put(`http://localhost:4000/api/auth/update`, { user: data }, { withCredentials: true }).then(res => {
+        await axios.put(`${serverUrl}/api/auth/update`, { user: data }, { withCredentials: true }).then(res => {
             window.location.reload();
         }).catch(err => {
             console.log(err)
@@ -151,7 +152,7 @@ const Profile = () => {
         if (checkFriendStatus() === "Request Sent") return;
 
         if (checkFriendStatus() === "Connect") {
-            await axios.post('http://localhost:4000/api/auth/sendFriendReq', { reciever: userData?._id }, { withCredentials: true }).then(res => {
+            await axios.post(`${serverUrl}/api/auth/sendFriendReq`, { reciever: userData?._id }, { withCredentials: true }).then(res => {
                 toast.success(res.data.message);
                 setTimeout(() => {
                     window.location.reload();
@@ -162,7 +163,7 @@ const Profile = () => {
                 toast.error(err?.response?.data?.error)
             })
         } else if (checkFriendStatus() === "Approve Request") {
-            await axios.post('http://localhost:4000/api/auth/acceptFriendRequest', { friendId: userData?._id }, { withCredentials: true }).then(res => {
+            await axios.post(`${serverUrl}/api/auth/acceptFriendRequest`, { friendId: userData?._id }, { withCredentials: true }).then(res => {
                 toast.success(res.data.message);
                 setTimeout(() => {
                     window.location.reload();
@@ -172,7 +173,7 @@ const Profile = () => {
                 toast.error(err?.response?.data?.error)
             })
         } else {
-            await axios.delete(`http://localhost:4000/api/auth/removeFromFriendList/${userData?._id}`, { withCredentials: true }).then(res => {
+            await axios.delete(`${serverUrl}/api/auth/removeFromFriendList/${userData?._id}`, { withCredentials: true }).then(res => {
                 toast.success(res.data.message);
                 setTimeout(() => {
                     window.location.reload();
@@ -185,7 +186,7 @@ const Profile = () => {
     }
 
     const handleLogout = async () => {
-        await axios.post('http://localhost:4000/api/auth/logout', {}, { withCredentials: true }).then(res => {
+        await axios.post(`${serverUrl}/api/auth/logout`, {}, { withCredentials: true }).then(res => {
             localStorage.clear();
             window.location.reload();
         }).catch(err => {
@@ -196,7 +197,7 @@ const Profile = () => {
 
     const copyToClipboard = async () => {
         try {
-            let string = `http://localhost:5173/profile/${id}`
+            let string = `${window.location.origin}/profile/${id}`
             await navigator.clipboard.writeText(string);
             toast.success('Copied to clipboard!');
         } catch (err) {

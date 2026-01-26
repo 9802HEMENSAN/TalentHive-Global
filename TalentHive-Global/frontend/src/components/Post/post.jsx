@@ -7,6 +7,7 @@ import SendIcon from '@mui/icons-material/Send';
 import axios from 'axios';
 import { ToastContainer,toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
+import { serverUrl } from '../../App';
 
 const Post = ({ profile, item, key, personalData }) => {
     const [seeMore, setSeeMore] = useState(false);
@@ -23,8 +24,9 @@ const Post = ({ profile, item, key, personalData }) => {
         e.preventDefault();
         if(commentText.trim().length===0) return toast.error("Please enter comment");
 
-        await axios.post(`http://localhost:4000/api/comment`,{postId:item?._id,comment:commentText},{withCredentials:true}).then((res=>{
+        await axios.post(`${serverUrl}/api/comment`,{postId:item?._id,comment:commentText},{withCredentials:true}).then((res=>{
             setComments([res.data.comment,...comments]);
+            setCommenttext("");
         })).catch(err => {
             console.log(err)
             alert('Something Went Wrong')
@@ -44,7 +46,7 @@ const Post = ({ profile, item, key, personalData }) => {
     }, [])
 
     const handleLikeFunc = async () => {
-        await axios.post('http://localhost:4000/api/post/likeDislike', { postId: item?._id }, { withCredentials: true }).then(res => {
+        await axios.post(`${serverUrl}/api/post/likeDislike`, { postId: item?._id }, { withCredentials: true }).then(res => {
             if (liked) {
                 setNoOfLike((prev) => prev - 1);
                 setLiked(false)
@@ -60,7 +62,7 @@ const Post = ({ profile, item, key, personalData }) => {
 
     const handleCommentBoxOpenClose = async () => {
         setComment(true)
-        await axios.get(`http://localhost:4000/api/comment/${item?._id}`).then(resp => {
+        await axios.get(`${serverUrl}/api/comment/${item?._id}`).then(resp => {
             console.log(resp)
             setComments(resp.data.comments)
         }).catch(err => {
@@ -71,7 +73,7 @@ const Post = ({ profile, item, key, personalData }) => {
 
     const copyToClipboard = async () => {
         try {
-            let string = `http://localhost:5173/profile/${item?.user?._id}/activities/${item?._id}`
+            let string = `${window.location.origin}/profile/${item?.user?._id}/activities/${item?._id}`
             await navigator.clipboard.writeText(string);
             toast.success('Copied to clipboard!');
         } catch (err) {
@@ -129,7 +131,7 @@ const Post = ({ profile, item, key, personalData }) => {
                         <img src={personalData?.profilePic} className='rounded-full w-12 h-12 border-2 border-white cursor-pointer' />
 
                         <form className="w-full flex gap-2" onSubmit={handleSendComment} >
-                            <input value={commentText} onChange={(event)=>setCommenttext(event.target.value)} placeholder="Add a comment..." className="w-full border-1 py-3 px-5 rounded-3xl hover:bg-gray-100" />
+                            <input value={commentText} onChange={(event)=> setCommenttext(event.target.value)} placeholder="Add a comment..." className="w-full border-1 py-3 px-5 rounded-3xl hover:bg-gray-100" />
                             <button type='submit' className='cursor-pointer bg-blue-800 text-white rounded-3xl py-1 px-3'>Send</button>
                         </form>
 

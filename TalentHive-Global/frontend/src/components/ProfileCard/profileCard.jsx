@@ -10,7 +10,7 @@ const ProfileCard = (props) => {
                     <img src={props.data?.cover_pic} className='rounded-t-md h-full w-full' />
                 </div>
                 <div className='absolute top-14 left-6 z-10'>
-                    <img src={props?.data?.profilePic} className='rounded-full border-2 h-16 w-16 border-white cursor-pointer' />
+                    <img src={props?.data?.profilePic ||  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcS5TPu3HoTZkTyxzVY6h3fuKo-nPU85G5u4Vw&s"} className='rounded-full border-2 h-16 w-16 border-white cursor-pointer' />
                 </div>
             </Link>
             <div className='p-5'>

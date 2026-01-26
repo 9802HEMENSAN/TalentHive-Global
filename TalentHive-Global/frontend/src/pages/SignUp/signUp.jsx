@@ -3,6 +3,7 @@ import { Link,useNavigate } from 'react-router-dom'
 import GoogleLoginComp from '../../components/GoogleLogin/googleLoginComp'
 import { ToastContainer,toast } from 'react-toastify'
 import axios from 'axios'
+import { serverUrl } from '../../App'
 
 
 const SignUp = (props) => {
@@ -19,7 +20,7 @@ const SignUp = (props) => {
             return toast.error("Please Fill All Details.")
         }
 
-        await axios.post('http://localhost:4000/api/auth/register',registerField).then(res=>{
+        await axios.post(`${serverUrl}/api/auth/register`,registerField).then(res=>{
 
             toast.success("You have registered successfully");
             setRegisterField({...registerField,email:"",password:"",f_name:""})

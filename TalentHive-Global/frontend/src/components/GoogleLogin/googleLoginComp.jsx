@@ -2,6 +2,7 @@ import React from 'react'
 import { GoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import { serverUrl } from '../../App';
 
 const GoogleLoginComp = (props) => {
 
