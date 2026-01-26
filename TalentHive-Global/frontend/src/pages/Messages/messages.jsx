@@ -62,7 +62,7 @@ const Messages = () => {
     },[messages])
 
     const fetchMessages = async () => {
-        await axios.get(`http://localhost:4000/api/message/${activeConvId}`, { withCredentials: true }).then(res => {
+        await axios.get(`${serverUrl}/api/message/${activeConvId}`, { withCredentials: true }).then(res => {
             console.log(res)
             setMessages(res.data.message)
         }).catch(err => {
@@ -73,7 +73,7 @@ const Messages = () => {
 
 
     const fetchConversationOnLoad = async () => {
-        await axios.get('http://localhost:4000/api/conversation/get-conversation', { withCredentials: true }).then(res => {
+        await axios.get(`${serverUrl}/api/conversation/get-conversation`, { withCredentials: true }).then(res => {
             setConversations(res.data.conversations)
             setActiveConvId(res.data?.conversations[0]?._id)
             socket.emit("joinConversation",res.data?.conversations[0]?._id)
@@ -92,10 +92,10 @@ const Messages = () => {
         const data = new FormData();
         data.append('file', files[0]);
 
-        data.append('upload_preset', 'linkedInClone');
+        data.append('upload_preset', 'TalentHive-Global');
         setLoading(true)
         try {
-            const response = await axios.post("https://api.cloudinary.com/v1_1/mashhuudanny/image/upload", data)
+            const response = await axios.post("https://api.cloudinary.com/v1_1/dcpr0scl6/image/upload", data)
 
             const imageUrl = response.data.url;
             setImageLink(imageUrl)
@@ -107,7 +107,7 @@ const Messages = () => {
     }
 
     const handleSendMessaeg = async()=>{
-        await axios.post(`http://localhost:4000/api/message`,{conversation:activeConvId, message:messageText,picture:imageLink },{withCredentials:true}).then(res=>{
+        await axios.post(`${serverUrl}/api/message`,{conversation:activeConvId, message:messageText,picture:imageLink },{withCredentials:true}).then(res=>{
             
             socket.emit("sendMessage",activeConvId,res.data)
             setMessageText("")
