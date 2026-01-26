@@ -8,7 +8,8 @@ const GoogleLoginComp = (props) => {
     const navigate= useNavigate();
     const handleOnSucess = async (credResponse) => {
         const token = credResponse.credential;
-        const res = await axios.post('http://localhost:4000/api/auth/google', { token }, { withCredentials: true });
+        const res = await axios.post(`${serverUrl}/api/auth/google`, { token }, { 
+            timeout: 60000, withCredentials: true });
         
         console.log(res );
         localStorage.setItem('isLogin', 'true');

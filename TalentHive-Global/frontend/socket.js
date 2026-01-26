@@ -1,6 +1,6 @@
 import {io} from "socket.io-client";
 
-const socket = io("https://talenthive-global.onrender.com", {
+const socket = io(`https://talenthive-global.onrender.com`, {
   transports: ["websocket"],
   withCredentials: true,
 });
