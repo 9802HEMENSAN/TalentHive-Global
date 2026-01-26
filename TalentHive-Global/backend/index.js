@@ -4,18 +4,20 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const {Server} = require('socket.io')
 const http = require("http");
+const PORT_ORIGIN = process.env.PORT_ORIGIN || 5000;
+ 
 
 const server = http.createServer(app);
 const io = new Server(server,{
     cors:{
-        origin:"http://localhost:5173",
+        origin:`http://localhost:${PORT_ORIGIN}`,
         methods:['GET','POST'],
     }
 })
 
 
-require('./connection');
 require('dotenv').config({path:"./config.env"});
+require('./connection.js');
 
 const PORT = process.env.PORT || 4000;
 
@@ -23,7 +25,7 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials:true,
-    origin:"http://localhost:5173"
+    origin:`http://localhost:${PORT_ORIGIN}`
 }))
 
 
