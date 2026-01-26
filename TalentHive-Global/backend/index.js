@@ -26,8 +26,8 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors({
     credentials:true,
-    origin: [`http://localhost:${PORT_ORIGIN}`, "https://talenthive-global.vercel.app"],// if deployed 
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    origin: [`http://localhost:${PORT_ORIGIN}`, "https://talent-hive-global.vercel.app"],// if deployed 
+    methods: ["GET", "POST", "PUT", "DELETE"]
 }))
 
 
