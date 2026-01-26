@@ -1,4 +1,30 @@
-.node-modules
-.config.env
+ 
+# Node dependencies
 node_modules/
-.env
+
+# Environment variables
+.config.env
+.env.local
+.env.development
+.env.production
+
+# Build outputs
+dist/
+build/
+
+# Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Editor configs
+.vscode/
+.idea/
+
+# Cache
+.cache/
