@@ -15,8 +15,8 @@ const cookieOptions = {
 
 const client = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
-exports.loginThroghGmail = async(req,res)=>{
-    try{
+exports.loginThroghGmail = async (req, res) => {
+    try {
         const { token } = req.body;
         const ticket = await client.verifyIdToken({
             idToken: token,
@@ -24,72 +24,87 @@ exports.loginThroghGmail = async(req,res)=>{
         });
         const payload = ticket.getPayload();
 
-        const {sub, email, name, picture} = payload;
+        const { sub, email, name, picture } = payload;
 
-        let userExist = await User.findOne({email});
+        let userExist = await User.findOne({ email });
         if (!userExist) {
             // Register new user
             userExist = await User.create({
                 googleId: sub,
                 email,
-                f_name:name,
+                f_name: name,
                 profilePic: picture
             });
         }
-        let jwttoken =  jwt.sign({ userId: userExist._id }, process.env.JWT_PRIVATE_KEY);
-        res.cookie('token',jwttoken,cookieOptions);
+        let jwttoken = jwt.sign({ userId: userExist._id }, process.env.JWT_PRIVATE_KEY);
+        res.cookie('token', jwttoken, cookieOptions);
         return res.status(200).json({ user: userExist });
 
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
-exports.register = async (req,res)=>{
-    try{
-        let {email,password,f_name} = req.body;
-        let isUserExist = await User.findOne({email});
-        if(isUserExist){
+exports.register = async (req, res) => {
+    try {
+        let { email, password, f_name } = req.body;
+        let isUserExist = await User.findOne({ email });
+        if (isUserExist) {
             return res.status(400).json({ error: "Already have an account with this email .Please try with other email" });
         }
-        const hashedPassword = await bcryptjs.hash(password,10);
-        const newUser = new User({email,password:hashedPassword,f_name});
+        const hashedPassword = await bcryptjs.hash(password, 10);
+        const newUser = new User({ email, password: hashedPassword, f_name });
         await newUser.save();
 
         return res.status(201).json({ message: 'User registered successfully', success: "yes", data: newUser });
 
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
-exports.login = async(req,res)=>{
-    try{
-        let {email,password} = req.body;
-        const userExist = await User.findOne({email});
+exports.login = async (req, res) => {
+    try {
+        let { email, password } = req.body;
+        const userExist = await User.findOne({ email });
 
-        if(userExist && !userExist.password){
+        if (userExist && !userExist.password) {
             return res.status(400).json({ error: 'Please login through Google' });
 
         }
-        
-        if(userExist && await bcryptjs.compare(password,userExist.password)){
-            let token =  jwt.sign({ userId: userExist._id }, process.env.JWT_PRIVATE_KEY);
-            res.cookie('token',token,cookieOptions)
+
+        if (userExist && await bcryptjs.compare(password, userExist.password)) {
+            let token = jwt.sign({ userId: userExist._id }, process.env.JWT_PRIVATE_KEY);
+            res.cookie('token', token, cookieOptions)
             return res.json({ message: 'Logged in successfully', success: "true", userExist });
-        }else{
+        } else {
             return res.status(400).json({ error: 'Invalid credentials' });
         }
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
-exports.updateUser = async(req,res)=>{
-    try{
+exports.checkAuth = async (req, res) => {
+    try {
+        const token = req.cookies.token;
+
+        if (!token) {
+            return res.status(401).json({ authenticated: false });
+        }
+        // verify token here...
+        return res.json({ authenticated: true });
+    } catch (error) {
+        console.log(error);
+        res.status(500).json({ error: 'Server error', message: err.message });
+    }
+}
+
+exports.updateUser = async (req, res) => {
+    try {
         const { user } = req.body;
         const isExist = await User.findById(req.user._id);
         if (!isExist) {
@@ -102,14 +117,14 @@ exports.updateUser = async(req,res)=>{
             message: "User updated successfully",
             user: userData
         });
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
-exports.getProfileById = async(req,res)=>{
-    try{
+exports.getProfileById = async (req, res) => {
+    try {
         const { id } = req.params;
         const isExist = await User.findById(id);
         if (!isExist) {
@@ -119,27 +134,27 @@ exports.getProfileById = async(req,res)=>{
             message: "User fetched successfully",
             user: isExist
         });
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
 
 
-exports.logout = async(req,res)=>{
+exports.logout = async (req, res) => {
     res.clearCookie('token', cookieOptions).json({ message: 'Logged out successfully' });
 }
 
 
-exports.findUser = async(req,res)=>{
-    try{
-        let {query} = req.query;
+exports.findUser = async (req, res) => {
+    try {
+        let { query } = req.query;
         const users = await User.find({
-             $and:[
-                {_id : {$ne:req.user._id}},
+            $and: [
+                { _id: { $ne: req.user._id } },
                 {
-                    $or:[
+                    $or: [
                         { name: { $regex: new RegExp(`^${query}`, 'i') } },
                         { email: { $regex: new RegExp(`^${query}`, 'i') } }
                     ]
@@ -147,18 +162,18 @@ exports.findUser = async(req,res)=>{
             ]
         });
         return res.status(201).json({
-            message:"Fetched Member",
-            users:users
+            message: "Fetched Member",
+            users: users
         })
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
 
-exports.sendFriendRequest = async(req,res)=>{
-    try{
+exports.sendFriendRequest = async (req, res) => {
+    try {
         const sender = req.user._id;
         const { reciever } = req.body;
 
@@ -169,14 +184,14 @@ exports.sendFriendRequest = async(req,res)=>{
             });
         };
         const index = req.user.friends.findIndex(id => id.equals(reciever));
-        if(index!==-1){
+        if (index !== -1) {
             return res.status(400).json({
                 error: "Already Friend"
             });
         }
         const lastIndex = userExist.pending_friends.findIndex(id => id.equals(req.user._id));
 
-        if(lastIndex!==-1){
+        if (lastIndex !== -1) {
             return res.status(400).json({
                 error: "Already Sent Request"
             });
@@ -193,16 +208,16 @@ exports.sendFriendRequest = async(req,res)=>{
         res.status(200).json({
             message: "Friend Request Sent",
         })
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
 
 
-exports.acceptFriendRequest = async(req,res)=>{
-    try{
+exports.acceptFriendRequest = async (req, res) => {
+    try {
         let { friendId } = req.body;
         let selfId = req.user._id;
 
@@ -237,40 +252,40 @@ exports.acceptFriendRequest = async(req,res)=>{
         return res.status(200).json({
             message: "You both are connected now."
         })
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
 
-exports.getFriendsList = async(req,res)=>{
-    try{
+exports.getFriendsList = async (req, res) => {
+    try {
         let friendsList = await req.user.populate('friends');
         return res.status(200).json({
-            friends:friendsList.friends
-        }) 
-    }catch(err){
+            friends: friendsList.friends
+        })
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
-exports.getPendingFriendList = async(req,res)=>{
-    try{
+exports.getPendingFriendList = async (req, res) => {
+    try {
         let pendingFriendsList = await req.user.populate('pending_friends');
         return res.status(200).json({
-            pendingFriends:pendingFriendsList.pending_friends
-        }) 
-    }catch(err){
+            pendingFriends: pendingFriendsList.pending_friends
+        })
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }
 
 
-exports.removeFromFriend = async(req,res)=>{
-    try{
+exports.removeFromFriend = async (req, res) => {
+    try {
         let selfId = req.user._id;
         let { friendId } = req.params;
 
@@ -303,8 +318,8 @@ exports.removeFromFriend = async(req,res)=>{
         return res.status(200).json({
             message: "You both are disconnected now."
         })
-    }catch(err){
+    } catch (err) {
         console.error(err);
-        res.status(500).json({ error: 'Server error',message:err.message });
+        res.status(500).json({ error: 'Server error', message: err.message });
     }
 }

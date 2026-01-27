@@ -20,9 +20,9 @@ const Login = (props) => {
         }
         await axios.post(`${serverUrl}/api/auth/login`,loginField,{withCredentials:true}).then((res) => {
             console.log("login page response",res);
-            props.changeLoginValue(true);
-            localStorage.setItem('isLogin', 'true');
-            localStorage.setItem("userInfo", JSON.stringify(res.data.userExist));
+            props.changeLoginValue(true); 
+            // localStorage.setItem('isLogin', 'true');
+            // localStorage.setItem("userInfo", JSON.stringify(res.data.userExist));
             navigate('/feeds')
         }).catch(err => {
             console.log(err)

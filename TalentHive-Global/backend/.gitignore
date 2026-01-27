@@ -4,6 +4,7 @@ node_modules/
 
 # Environment variables
 .config.env
+config.env
 .env.local
 .env.development
 .env.production
