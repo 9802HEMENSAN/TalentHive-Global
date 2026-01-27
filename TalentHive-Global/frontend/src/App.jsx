@@ -17,8 +17,8 @@ import AllActivities from './pages/AllActivities/allActivities'
 import SingleActivity from './pages/SingleActivity/singleActivity'
 import Notification from './pages/Notification/notification'
 
-// export const serverUrl = `https://talenthive-global.onrender.com`;
-export const serverUrl = `http://localhost:4000`;
+export const serverUrl = `https://talenthive-global.onrender.com`;
+// export const serverUrl = `http://localhost:4000`;
 
 
 
