@@ -20,8 +20,6 @@ import Notification from './pages/Notification/notification'
 export const serverUrl = `https://talenthive-global.onrender.com`;
 // export const serverUrl = `http://localhost:4000`;
 
-
-
 function App() {
   const [isLogin, setIsLogin] = useState(false);
 
@@ -29,7 +27,7 @@ function App() {
     setIsLogin(val)
   } 
 
-  // CHECK AUTH ON APP LOAD
+  // CHECK AUTH ON APP LOAD 
   useEffect(() => {
     const checkAuth = async () => {
       try {
